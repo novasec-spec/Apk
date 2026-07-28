@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <shortcut
+
+        android:shortcutId="new_note"
+
+        android:enabled="true"
+
+        android:icon="@drawable/ic_add"
+
+        android:shortcutShortLabel="@string/new_note"
+
+        android:shortcutLongLabel="@string/create_new_note">
+
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.myapp"
+            android:targetClass="com.example.myapp.MainActivity" />
+
+    </shortcut>
+
+
+
+    <shortcut
+
+        android:shortcutId="profile"
+
+        android:enabled="true"
+
+        android:icon="@drawable/ic_profile"
+
+        android:shortcutShortLabel="@string/profile"
+
+        android:shortcutLongLabel="@string/open_profile">
+
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.myapp"
+            android:targetClass="com.example.myapp.MainActivity" />
+
+    </shortcut>
+
+
+</shortcuts>

@@ -1,0 +1,11 @@
+<resources>
+
+<string name="app_name">Apk</string>
+
+    <string name="new_note">New Note</string>
+    <string name="create_new_note">Create a new note</string>
+
+    <string name="profile">Profile</string>
+    <string name="open_profile">Open profile</string>
+
+</resources>

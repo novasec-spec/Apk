@@ -1,0 +1,62 @@
+# Gradle
+.gradle/
+**/build/
+
+# Local configuration
+local.properties
+
+# Android Studio
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Android build outputs
+*.apk
+*.aab
+*.apks
+*.dex
+*.class
+
+# Generated files
+gen/
+out/
+
+# Caches
+*.log
+*.tmp
+*.cache
+
+# Kotlin/Java generated
+.kotlin/
+*.kotlin_module
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# Signing keys (IMPORTANT)
+*.jks
+*.keystore
+
+# Firebase / secrets
+google-services.json
+*.json.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Gradle wrapper caches
+.gradle-cache/
+
+# Android Studio screenshots
+/screenshots/
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Termux / local machine
+*.pid
