@@ -60,3 +60,6 @@ Thumbs.db
 
 # Termux / local machine
 *.pid
+
+# Sentry Config File
+sentry.properties

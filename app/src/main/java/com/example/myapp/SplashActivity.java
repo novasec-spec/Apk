@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Handler;
 import android.widget.ImageView;
 import android.view.animation.TranslateAnimation;
+import io.sentry.Sentry;
 
-
+import com.example.myapp.auth.SessionManager;
+ 
 public class SplashActivity extends Activity {
 
     private static final int SPLASH_TIME = 2000;
@@ -16,6 +18,15 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    // waiting for view to draw to better represent a captured error with a screenshot
+    findViewById(android.R.id.content).getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+      try {
+        throw new Exception("This app uses Sentry! :)");
+      } catch (Exception e) {
+        Sentry.captureException(e);
+      }
+    });
+
 
         ImageView image = new ImageView(this);
 
@@ -50,16 +61,22 @@ public class SplashActivity extends Activity {
 
             new Handler().postDelayed(() -> {
 
-                Intent intent =
-                        new Intent(
-                            SplashActivity.this,
-                            MainActivity.class
-                        );
+SessionManager session = new SessionManager(this);
 
+Intent intent;
 
-                startActivity(intent);
+if (session.isLoggedIn()) {
 
-                finish();
+    intent = new Intent(this, MainActivity.class);
+
+} else {
+
+    intent = new Intent(this, LoginActivity.class);
+
+}
+
+startActivity(intent);
+finish();
 
 
             },700);

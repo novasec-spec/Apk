@@ -11,7 +11,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             // 2. Fixed context package retrieval syntax and layout references
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.my_widget);
-            views.setTextViewText(R.id.widget_text, "Hello World!");
+            views.setTextViewText(R.id.widget_text, "Hello World!!");
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }

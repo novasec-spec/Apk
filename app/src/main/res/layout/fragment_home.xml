@@ -1,4 +1,6 @@
-<TextView
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
 
 xmlns:android="http://schemas.android.com/apk/res/android"
 
@@ -6,8 +8,35 @@ android:layout_width="match_parent"
 
 android:layout_height="match_parent"
 
+android:orientation="vertical"
+
+android:gravity="center"
+
+android:padding="20dp">
+
+
+<TextView
+
+android:layout_width="wrap_content"
+
+android:layout_height="wrap_content"
+
 android:text="Home Screen"
 
-android:textSize="30sp"
+android:textSize="30sp"/>
 
-android:gravity="center"/>
+
+<Button
+
+android:id="@+id/testNotification"
+
+android:layout_width="wrap_content"
+
+android:layout_height="wrap_content"
+
+android:text="Test Notification"
+
+android:layout_marginTop="30dp"/>
+
+
+</LinearLayout>

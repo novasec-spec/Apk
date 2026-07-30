@@ -56,29 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // Test notification button
-
-        Button button =
-                findViewById(R.id.testNotification);
-
-
-
-        button.setOnClickListener(v -> {
-
-
-            NotificationHelper.sendNotification(
-                    this,
-                    "Welcome",
-                    "Your first notification works 🔥"
-            );
-
-
-        });
-
-
-
-
-
         // Settings button
 
         ImageButton settingsButton =
@@ -117,9 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ImageButton musicTab =
-                findViewById(R.id.musicTab);
-
-
+findViewById(R.id.musicBottomTab);
 
 
 
@@ -158,10 +133,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         musicTab.setOnClickListener(v -> {
 
-            loadFragment(
+           loadFragment(
                     new MusicFragment()
             );
 
