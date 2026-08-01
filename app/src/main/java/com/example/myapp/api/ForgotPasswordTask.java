@@ -8,37 +8,28 @@ import com.example.myapp.utils.JsonParser;
 import com.example.myapp.utils.NetworkUtils;
 import org.json.JSONObject;
 
-public class RegisterTask extends AsyncTask<String, Void, String> {
+public class ForgotPasswordTask extends AsyncTask<String, Void, String> {
     
-    public interface RegisterCallback {
-        void onRegisterSuccess(String message);
-        void onRegisterError(String error);
-        void onRegisterNetworkError(String error);
+    public interface ForgotPasswordCallback {
+        void onForgotPasswordSuccess(String message);
+        void onForgotPasswordError(String error);
+        void onForgotPasswordNetworkError(String error);
     }
 
-    private RegisterCallback callback;
+    private ForgotPasswordCallback callback;
     private Exception exception;
 
-    public RegisterTask(RegisterCallback callback) {
+    public ForgotPasswordTask(ForgotPasswordCallback callback) {
         this.callback = callback;
     }
 
     @Override
     protected String doInBackground(String... params) {
         String email = params[0];
-        String password = params[1];
-        String firstName = params.length > 2 ? params[2] : "";
-        String lastName = params.length > 3 ? params[3] : "";
 
         try {
-            JSONObject request = JsonParser.createRequest(
-                "email", email,
-                "password", password,
-                "firstName", firstName,
-                "lastName", lastName
-            );
-
-            String url = Constants.BASE_URL + Constants.API_AUTH_REGISTER;
+            JSONObject request = JsonParser.createRequest("email", email);
+            String url = Constants.BASE_URL + Constants.API_EMAIL_FORGOT_PASSWORD;
             return NetworkUtils.makeRequest(url, "POST", request.toString(), null);
         } catch (Exception e) {
             exception = e;
@@ -51,7 +42,7 @@ public class RegisterTask extends AsyncTask<String, Void, String> {
         if (callback == null) return;
 
         if (result == null) {
-            callback.onRegisterNetworkError(exception != null ? 
+            callback.onForgotPasswordNetworkError(exception != null ? 
                 exception.getMessage() : "Unknown network error");
             return;
         }
@@ -59,10 +50,10 @@ public class RegisterTask extends AsyncTask<String, Void, String> {
         ApiResponse<JSONObject> response = ApiResponse.fromJson(result);
         
         if (!response.isSuccess()) {
-            callback.onRegisterError(response.getErrorMessage());
+            callback.onForgotPasswordError(response.getErrorMessage());
             return;
         }
 
-        callback.onRegisterSuccess(response.getMessage());
+        callback.onForgotPasswordSuccess(response.getMessage());
     }
 }

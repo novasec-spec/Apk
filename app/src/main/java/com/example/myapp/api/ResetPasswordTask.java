@@ -3,40 +3,38 @@ package com.example.myapp.api;
 import android.os.AsyncTask;
 
 import com.example.myapp.model.ApiResponse;
-import com.example.myapp.model.AuthResponse;
 import com.example.myapp.utils.Constants;
 import com.example.myapp.utils.JsonParser;
 import com.example.myapp.utils.NetworkUtils;
-
 import org.json.JSONObject;
 
-public class LoginTask extends AsyncTask<String, Void, String> {
+public class ResetPasswordTask extends AsyncTask<String, Void, String> {
     
-    public interface LoginCallback {
-        void onLoginSuccess(AuthResponse authResponse);
-        void onLoginError(String error);
-        void onLoginNetworkError(String error);
+    public interface ResetPasswordCallback {
+        void onResetPasswordSuccess(String message);
+        void onResetPasswordError(String error);
+        void onResetPasswordNetworkError(String error);
     }
 
-    private LoginCallback callback;
+    private ResetPasswordCallback callback;
     private Exception exception;
 
-    public LoginTask(LoginCallback callback) {
+    public ResetPasswordTask(ResetPasswordCallback callback) {
         this.callback = callback;
     }
 
     @Override
     protected String doInBackground(String... params) {
-        String email = params[0];
-        String password = params[1];
+        String token = params[0];
+        String newPassword = params[1];
 
         try {
             JSONObject request = JsonParser.createRequest(
-                "email", email,
-                "password", password
+                "token", token,
+                "newPassword", newPassword
             );
 
-            String url = Constants.BASE_URL + Constants.API_AUTH_LOGIN;
+            String url = Constants.BASE_URL + Constants.API_EMAIL_RESET_PASSWORD;
             return NetworkUtils.makeRequest(url, "POST", request.toString(), null);
         } catch (Exception e) {
             exception = e;
@@ -49,7 +47,7 @@ public class LoginTask extends AsyncTask<String, Void, String> {
         if (callback == null) return;
 
         if (result == null) {
-            callback.onLoginNetworkError(exception != null ? 
+            callback.onResetPasswordNetworkError(exception != null ? 
                 exception.getMessage() : "Unknown network error");
             return;
         }
@@ -57,17 +55,10 @@ public class LoginTask extends AsyncTask<String, Void, String> {
         ApiResponse<JSONObject> response = ApiResponse.fromJson(result);
         
         if (!response.isSuccess()) {
-            callback.onLoginError(response.getErrorMessage());
+            callback.onResetPasswordError(response.getErrorMessage());
             return;
         }
 
-        JSONObject data = response.getData();
-        AuthResponse authResponse = AuthResponse.fromJson(data);
-        
-        if (authResponse != null && authResponse.hasTokens()) {
-            callback.onLoginSuccess(authResponse);
-        } else {
-            callback.onLoginError("Invalid response format");
-        }
+        callback.onResetPasswordSuccess(response.getMessage());
     }
 }

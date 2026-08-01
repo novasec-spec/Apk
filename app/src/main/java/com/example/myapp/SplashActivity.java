@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.widget.ImageView;
 import android.view.animation.TranslateAnimation;
 import io.sentry.Sentry;
-
+import com.example.myapp.activities.LoginActivity;
 import com.example.myapp.auth.SessionManager;
  
 public class SplashActivity extends Activity {

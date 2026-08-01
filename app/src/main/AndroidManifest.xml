@@ -1,97 +1,184 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-<uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
-<uses-permission android:name="android.permission.INTERNET"/>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <!-- Permissions - Keeping all your existing ones -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Optional: Add these for better network debugging -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    
     <application
         android:theme="@style/AppTheme"
         android:label="Nova"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
-        android:networkSecurityConfig="@xml/network_security_config">
-      <activity
-    android:name=".SplashActivity"
-    android:theme="@style/SplashTheme"
-    android:exported="true">
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        tools:targetApi="31">
 
-    <intent-filter>
-
-        <action android:name="android.intent.action.MAIN"/>
-
-        <category android:name="android.intent.category.LAUNCHER"/>
-
-    </intent-filter>
-  <meta-data                                                                                       
-        android:name="android.app.shortcuts"                                                         
-        android:resource="@xml/shortcuts"
-        android:launchMode="singleTop"/>
-        
-    </activity>
-<activity android:name=".RegisterActivity"/>
-<activity android:name=".LoginActivity"/>
-<activity
-android:name=".NotificationActivity"/>    
-       <activity
-            android:name=".MainActivity"
-            android:exported="true">
-
+        <!-- ==================== SPLASH ACTIVITY ==================== -->
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme"
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
-
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+            
+            <!-- App Shortcuts -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
 
-<receiver android:name=".MyWidgetProvider"
-          android:exported="true">
-    <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-    </intent-filter>
-    <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/my_widget_info" />
-</receiver>
-<service
-    android:name=".MyCustomTileService"
-    android:label="My Custom Tile"
-    android:icon="@drawable/ic_tile_icon"
-    android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-    android:exported="true">
-    <intent-filter>
-        <action android:name="android.service.quicksettings.action.QS_TILE" />
-    </intent-filter>
-</service>
-<service
+        <!-- ==================== AUTHENTICATION ACTIVITIES ==================== -->
+        <!-- Login Activity -->
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".SplashActivity" />
 
-android:name=".service.MusicService"
+        <!-- Register Activity -->
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".LoginActivity" />
 
-android:foregroundServiceType="mediaPlayback"
+        <!-- Forgot Password Activity -->
+        <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".LoginActivity" />
 
-android:exported="false"/>
+        <!-- Reset Password Activity -->
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".LoginActivity" />
 
-    
-    <!-- Required: set your sentry.io project identifier (DSN) -->
-    <meta-data android:name="io.sentry.dsn" android:value="https://7505066db21919d4bdf65fb56ebdad8e@o4511667237093376.ingest.de.sentry.io/4511667330809936" />
-    <!-- Add data like request headers, user ip address and device name, see https://docs.sentry.io/platforms/android/data-management/data-collected/ for more info -->
-    <meta-data android:name="io.sentry.send-default-pii" android:value="true" />
+        <!-- Profile Activity -->
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
 
-    <!-- enable automatic breadcrumbs for user interactions (clicks, swipes, scrolls) -->
-    <meta-data android:name="io.sentry.traces.user-interaction.enable" android:value="true" />
-    <!-- enable screenshot for crashes (could contain sensitive/PII data) -->
-    <meta-data android:name="io.sentry.attach-screenshot" android:value="true" />
-    <!-- enable view hierarchy for crashes -->
-    <meta-data android:name="io.sentry.attach-view-hierarchy" android:value="true" />
+        <!-- ==================== MAIN ACTIVITIES ==================== -->
+        <!-- Your existing MainActivity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-    <!-- enable the performance API by setting a sample-rate, adjust in production env -->
-    <meta-data android:name="io.sentry.traces.sample-rate" android:value="1.0" />
-    <!-- enable Sentry Logs -->
-    <meta-data android:name="io.sentry.logs.enabled" android:value="true" />
-</application>
+        <!-- ==================== NOTIFICATION ACTIVITY ==================== -->
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- ==================== WIDGETS & RECEIVERS ==================== -->
+        <receiver
+            android:name=".MyWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/my_widget_info" />
+        </receiver>
+
+        <!-- ==================== SERVICES ==================== -->
+        <!-- Quick Settings Tile Service -->
+        <service
+            android:name=".MyCustomTileService"
+            android:label="My Custom Tile"
+            android:icon="@drawable/ic_tile_icon"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- Music Player Service -->
+        <service
+            android:name=".service.MusicPlayerService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false" />
+
+        <!-- ==================== SENTRY CONFIGURATION ==================== -->
+        <!-- Required: set your sentry.io project identifier (DSN) -->
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://7505066db21919d4bdf65fb56ebdad8e@o4511667237093376.ingest.de.sentry.io/4511667330809936" />
+        
+        <!-- Add data like request headers, user ip address and device name -->
+        <meta-data
+            android:name="io.sentry.send-default-pii"
+            android:value="true" />
+
+        <!-- Enable automatic breadcrumbs for user interactions (clicks, swipes, scrolls) -->
+        <meta-data
+            android:name="io.sentry.traces.user-interaction.enable"
+            android:value="true" />
+        
+        <!-- Enable screenshot for crashes (could contain sensitive/PII data) -->
+        <meta-data
+            android:name="io.sentry.attach-screenshot"
+            android:value="true" />
+        
+        <!-- Enable view hierarchy for crashes -->
+        <meta-data
+            android:name="io.sentry.attach-view-hierarchy"
+            android:value="true" />
+
+        <!-- Enable the performance API by setting a sample-rate -->
+        <meta-data
+            android:name="io.sentry.traces.sample-rate"
+            android:value="1.0" />
+        
+        <!-- Enable Sentry Logs -->
+        <meta-data
+            android:name="io.sentry.logs.enabled"
+            android:value="true" />
+
+        <!-- ==================== DEEP LINKING (Optional) ==================== -->
+        <!-- Add this if you want to handle password reset links from emails -->
+        <!--
+        <activity
+            android:name=".activities.DeepLinkActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="yourapp.com"
+                    android:pathPrefix="/reset-password" />
+            </intent-filter>
+        </activity>
+        -->
+
+    </application>
 
 </manifest>
-

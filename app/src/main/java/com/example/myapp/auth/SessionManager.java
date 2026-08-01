@@ -3,47 +3,104 @@ package com.example.myapp.auth;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.myapp.utils.Constants;
+
 public class SessionManager {
-
-    private static final String PREF_NAME = "myapp_session";
-
-    private static final String KEY_LOGGED_IN = "logged_in";
-    private static final String KEY_TOKEN = "accessToken";
-    private static final String KEY_USERNAME = "username";
-    private static final String KEY_USER_ID = "user_id";
-
-    private final SharedPreferences prefs;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private Context context;
 
     public SessionManager(Context context) {
-        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        this.context = context;
+        pref = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
+        editor = pref.edit();
     }
 
-    public void login(String accessToken, int userId, String username) {
-        prefs.edit()
-                .putBoolean(KEY_LOGGED_IN, true)
-                .putString(KEY_TOKEN, accessToken)
-                .putInt(KEY_USER_ID, userId)
-                .putString(KEY_USERNAME, username)
-                .apply();
+    public void createLoginSession(String userId, String email, String firstName, 
+                                   String lastName, boolean isVerified,
+                                   String accessToken, String refreshToken, 
+                                   boolean rememberMe) {
+        editor.putBoolean(Constants.KEY_IS_LOGGED_IN, true);
+        editor.putString(Constants.KEY_USER_ID, userId);
+        editor.putString(Constants.KEY_USER_EMAIL, email);
+        editor.putString(Constants.KEY_USER_FIRST_NAME, firstName);
+        editor.putString(Constants.KEY_USER_LAST_NAME, lastName);
+        editor.putBoolean(Constants.KEY_USER_IS_VERIFIED, isVerified);
+        editor.putString(Constants.KEY_ACCESS_TOKEN, accessToken);
+        editor.putString(Constants.KEY_REFRESH_TOKEN, refreshToken);
+        editor.putBoolean(Constants.KEY_REMEMBER_ME, rememberMe);
+        editor.apply();
+    }
+
+    public void updateTokens(String accessToken, String refreshToken) {
+        editor.putString(Constants.KEY_ACCESS_TOKEN, accessToken);
+        editor.putString(Constants.KEY_REFRESH_TOKEN, refreshToken);
+        editor.apply();
+    }
+
+    public void updateUserInfo(String firstName, String lastName, boolean isVerified) {
+        if (firstName != null) {
+            editor.putString(Constants.KEY_USER_FIRST_NAME, firstName);
+        }
+        if (lastName != null) {
+            editor.putString(Constants.KEY_USER_LAST_NAME, lastName);
+        }
+        editor.putBoolean(Constants.KEY_USER_IS_VERIFIED, isVerified);
+        editor.apply();
+    }
+
+    public void logoutUser() {
+        editor.clear();
+        editor.apply();
     }
 
     public boolean isLoggedIn() {
-        return prefs.getBoolean(KEY_LOGGED_IN, false);
+        return pref.getBoolean(Constants.KEY_IS_LOGGED_IN, false);
     }
 
-    public String getToken() {
-        return prefs.getString(KEY_TOKEN, "");
+    public String getAccessToken() {
+        return pref.getString(Constants.KEY_ACCESS_TOKEN, null);
     }
 
-    public int getUserId() {
-        return prefs.getInt(KEY_USER_ID, -1);
+    public String getRefreshToken() {
+        return pref.getString(Constants.KEY_REFRESH_TOKEN, null);
     }
 
-    public String getUsername() {
-        return prefs.getString(KEY_USERNAME, "");
+    public String getUserEmail() {
+        return pref.getString(Constants.KEY_USER_EMAIL, null);
     }
 
-    public void logout() {
-        prefs.edit().clear().apply();
+    public String getUserId() {
+        return pref.getString(Constants.KEY_USER_ID, null);
+    }
+
+    public String getFirstName() {
+        return pref.getString(Constants.KEY_USER_FIRST_NAME, null);
+    }
+
+    public String getLastName() {
+        return pref.getString(Constants.KEY_USER_LAST_NAME, null);
+    }
+
+    public boolean isEmailVerified() {
+        return pref.getBoolean(Constants.KEY_USER_IS_VERIFIED, false);
+    }
+
+    public boolean getRememberMe() {
+        return pref.getBoolean(Constants.KEY_REMEMBER_ME, false);
+    }
+
+    public String getFullName() {
+        String firstName = getFirstName();
+        String lastName = getLastName();
+        if (firstName == null && lastName == null) return "";
+        if (firstName == null) return lastName;
+        if (lastName == null) return firstName;
+        return firstName + " " + lastName;
+    }
+
+    public void clear() {
+        editor.clear();
+        editor.apply();
     }
 }
